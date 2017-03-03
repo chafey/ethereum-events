@@ -1,0 +1,35 @@
+<head>
+  <title>app</title>
+</head>
+
+<body>
+  <div class="container">
+      {{>main}}
+  </div>
+</body>
+
+<template name="main">
+  {{#if isWeb3Enabled}}
+    <div class="jumbotron">
+      <h1>Ethereum Events</h1>
+      Welcome ethereum account {{address}}!
+    </div>
+    Create a new patient smart contract instance or attach to an existing one
+    {{>createOrAttach}}
+    <hr>
+    {{#if patientValid}}
+    Enter a new value for name, dob or gender and press save.  The change will
+    show up in the table below.
+    {{>modifyPatient}}
+    <hr>
+    All changes for this patient are displayed here
+    {{>patientChanges}}
+    {{/if}}
+  {{else}}
+    <div class="jumbotron">
+      <h1>Ethereum Events</h1>
+      No web3 provider detected.  We recommend using google chrome with the
+      <a href="http://metamask.io">metamask extension</a>
+    </div>
+  {{/if}}
+</template>

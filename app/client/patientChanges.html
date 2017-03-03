@@ -1,0 +1,23 @@
+<template name="patientChanges">
+  <button type="button">Update</button>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Block</th>
+        <th>Timestamp</th>
+        <th>Name</th>
+        <th>DOB</th>
+        <th>Gender</th>
+      </tr>
+    </thead>
+    {{#each change in changes}}
+        <tr>
+          <th>{{change.block}}</th>
+          <th>{{change.ts}}</th>
+          <th>{{change.name}}</th>
+          <th>{{change.dateOfBirth}}</th>
+          <th>{{change.gender}}</th>
+        </tr>
+    {{/each}}
+  </table>
+</template>
