@@ -1,10 +1,13 @@
 import { ReactiveVar } from 'meteor/reactive-var';
+const ethjsabi = require('ethjs-abi');
 
-var patient_patientContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_gender","type":"string"}],"name":"SetGender","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"SetName","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"dateOfBirth","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"gender","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_dateOfBirth","type":"string"}],"name":"SetDateOfBirth","outputs":[],"payable":false,"type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"what","type":"string"}],"name":"PatientChanged","type":"event"}]);
+var abi = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_gender","type":"string"}],"name":"SetGender","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"SetName","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"dateOfBirth","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"gender","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_dateOfBirth","type":"string"}],"name":"SetDateOfBirth","outputs":[],"payable":false,"type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"what","type":"string"}],"name":"PatientChanged","type":"event"}];
+
+var patient_patientContract = web3.eth.contract(abi);
 
 var patientInstance;
 
-var patientAddress = new ReactiveVar("0xc4f29ed4955aa71ae405b24bd1114a9720a3d364");
+var patientAddress = new ReactiveVar("0xdd9cbb3ac602ca21d60d63008b2130500a908652");
 var status = new ReactiveVar("Invalid");
 
 function create() {
@@ -21,8 +24,7 @@ function create() {
            return;
          }
         if (typeof contract.address !== 'undefined') {
-          console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
-          console.log('contrat:', contract);
+          //console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
           resolve(contract);
           status.set("Valid");
           patientAddress.set(contract.address);
@@ -35,16 +37,22 @@ function create() {
 
 function at(address) {
   patientInstance = patient_patientContract.at(address);
-  //console.log(patientInstance);
   status.set("Valid");
   return patientInstance;
 }
 
+function decodePatientChangedEvent(data) {
+  var de = ethjsabi.decodeEvent(abi[2], data);
+  return de;
+}
+
 export default {
+    abi: abi,
     contract: patient_patientContract,
     instance: function() {return patientInstance;},
     create: create,
     at: at,
     address: patientAddress,
-    status: status
+    status: status,
+    decodePatientChangedEvent : decodePatientChangedEvent
 }

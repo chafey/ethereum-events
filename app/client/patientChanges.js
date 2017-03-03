@@ -20,9 +20,8 @@ function getChanges() {
     result.forEach(function(e) {
       //console.log('e:', e);
       var pat = patient.at(e.address);
-      //console.log(pat);
       web3.eth.getTransaction(e.transactionHash, function(err, tx) {
-        //console.log('tx:', tx);
+        var what = patient.decodePatientChangedEvent(e.data)[0];
         web3.eth.getBlock(e.blockNumber, function(err, block) {
           pat.name(e.blockNumber, function(err,name) {
             pat.dateOfBirth(e.blockNumber, function(err,dateOfBirth) {
@@ -30,6 +29,7 @@ function getChanges() {
                 Changes.insert({
                   block: e.blockNumber,
                   ts: new Date(block.timestamp * 1000),
+                  what: what,
                   name: name,
                   dateOfBirth: dateOfBirth,
                   gender:gender
@@ -43,6 +43,9 @@ function getChanges() {
   });
 }
 
+Template.patientChanges.onCreated(() => {
+  getChanges();
+});
 
 Template.patientChanges.helpers({
   changes() {
