@@ -1,5 +1,5 @@
 <head>
-  <title>app</title>
+  <title>Ethereum Events</title>
 </head>
 
 <body>
@@ -12,8 +12,11 @@
   {{#if isWeb3Enabled}}
     <div class="jumbotron">
       <h1>Ethereum Events</h1>
-      Welcome ethereum account {{address}}!
+      Welcome Ethereum account {{address}}.
+      <br>
+      You are currently on {{network}}.
     </div>
+    <hr>
     Create a new patient smart contract instance or attach to an existing one
     {{>createOrAttach}}
     <hr>

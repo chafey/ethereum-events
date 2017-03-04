@@ -1,5 +1,5 @@
 import { ReactiveVar } from 'meteor/reactive-var';
-const ethjsabi = require('ethjs-abi');
+import ethjsabi from 'ethjs-abi';
 
 var abi = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_gender","type":"string"}],"name":"SetGender","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"SetName","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"dateOfBirth","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"gender","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_dateOfBirth","type":"string"}],"name":"SetDateOfBirth","outputs":[],"payable":false,"type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"what","type":"string"}],"name":"PatientChanged","type":"event"}];
 
@@ -7,7 +7,7 @@ var patient_patientContract = web3.eth.contract(abi);
 
 var patientInstance;
 
-var patientAddress = new ReactiveVar("0xdd9cbb3ac602ca21d60d63008b2130500a908652");
+var patientAddress = new ReactiveVar("");
 var status = new ReactiveVar("Invalid");
 
 function create() {
