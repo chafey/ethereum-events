@@ -6,25 +6,25 @@ import './main.html';
 
 var metaMaskState = new ReactiveVar(0);
 var network = new ReactiveVar("");
-var address = new ReactiveVar("");
+var account = new ReactiveVar("");
 
 Template.main.helpers({
   isWeb3Enabled() {
     return  metaMaskState.get() > 0;
   },
-  address() {
-    return address.get();
+  account() {
+    return account.get();
   },
   network() {
     switch(network.get()) {
       case "1":
-        return "public mainnet network";
+        return "the public main ethereum network (mainnet)";
         break;
       case "3":
-        return "public test network";
+        return "the public test ethereum network (ropsten)";
         break;
       default:
-        return "private network with id " + network.get();
+        return "a private ethereum network with id " + network.get();
         break;
     }
   },
@@ -33,23 +33,14 @@ Template.main.helpers({
   }
 })
 
-// poll for changes in the user and network so we can update the UI
-function monitorMetaMask() {
+// poll for changes in the user account
+function monitorMetaMaskAccountChange() {
   var id = setInterval(function(){
-    if(web3.eth.accounts[0] !== address.get()) {
-      address.set(web3.eth.accounts[0]);
-      console.log("new account selected");
+    if(web3.eth.accounts[0] !== account.get()) {
+      account.set(web3.eth.accounts[0]);
+      console.log("new user account selected in metamask!");
       metaMaskState.set(metaMaskState.get() + 1);
     }
-    // NOTE: currently this only works the first time - getNetwork() does not
-    // update when you change the network!
-    web3.version.getNetwork((err, netId) => {
-      if(network.get() !== netId) {
-        console.log('new network ' + netId);
-        network.set(netId);
-        metaMaskState.set(metaMaskState.get() + 1);
-      }
-    })
   }, 100);
 }
 
@@ -57,9 +48,15 @@ Meteor.startup(() => {
   // poll until metamask is initialized
   var id = setInterval(function(){
     if(web3 && web3.eth && web3.eth.accounts && web3.eth.accounts.length) {
-      metaMaskState.set(1);
-      monitorMetaMask();
       clearInterval(id);
+      account.set(web3.eth.accounts[0]);
+      metaMaskState.set(1);
+      monitorMetaMaskAccountChange();
+      web3.version.getNetwork((err, netId) => {
+        if(network.get() !== netId) {
+          network.set(netId);
+        }
+      });
     }
   }, 10);
 });

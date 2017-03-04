@@ -12,20 +12,25 @@
   {{#if isWeb3Enabled}}
     <div class="jumbotron">
       <h1>Ethereum Events</h1>
-      Welcome Ethereum account {{address}}.
+      Welcome Ethereum account {{account}}.
+      <br>
       <br>
       You are currently on {{network}}.
     </div>
     <hr>
     Create a new patient smart contract instance or attach to an existing one
+    <br>
+    <br>
     {{>createOrAttach}}
     <hr>
     {{#if patientValid}}
     Enter a new value for name, dob or gender and press save.  The change will
     show up in the table below.
+    <br>
+    <br>
     {{>modifyPatient}}
     <hr>
-    All changes for this patient are displayed here
+    The change history for this patient smart contract is displayed here.
     {{>patientChanges}}
     {{/if}}
   {{else}}

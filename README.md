@@ -29,6 +29,8 @@ Start the meteor application:
 
 Open your web browser to localhost:3000
 
+![Screenshot](ScreenShot.png).
+
 Press "Create" to create a new patient smart contract instance.  After a few
 seconds, geth will mine the transaction and the UI will update showing controls
 to modify the patient smart contract and a history of changes.  Go ahead and
